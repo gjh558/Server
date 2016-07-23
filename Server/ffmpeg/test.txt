@@ -1,0 +1,6 @@
+//test.avs
+DirectShowSource("d:\samples\rm\omnipresent.rm", fps=25, convertfps=true)
+
+ffmpeg -i test.avs test.mp4
+
+Enjoy it!
