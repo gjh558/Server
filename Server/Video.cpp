@@ -2,6 +2,7 @@
 #include "Phone.h"
 #include "VideoView.h"
 #include "Resource.h"
+#include "PhoneWindow.h"
 
 FILE *fp_b;
 
@@ -49,6 +50,23 @@ CVideo::CVideo(CWnd *win)
 	initFFMPEG();
 }
 
+CVideo::CVideo(PhoneWindow *p)
+	:m_pPhoneWindow(p)
+{
+	canShow = FALSE;
+	m_pPlayCwnd = p->m_pWnd;
+	memset(inbuf,0,(INBUF_SIZE));
+	// set end of buffer to 0 (this ensures that no overreading happens 
+	// for damaged mpeg streams)
+	//memset(inbuf + INBUF_SIZE, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+
+	//mPlayCwnd = pSensorTab->GetDlgItem(IDC_STATIC_VIDEO);
+	mdisplayBuffer = NULL;
+	mDrawDib  = DrawDibOpen();
+	//_wfopen_s(&fp_b, _T("D:/1.h264"), _T("wb+"));
+	initFFMPEG();
+}
+
 CVideo::~CVideo(void)
 {
 	
@@ -81,7 +99,10 @@ void CVideo::OnConnect(int nErrorCode)
 
 void CVideo::OnClose(int nErrorCode)
 {
-	// TODO: 在此添加专用代码和/或调用基类
+	m_pPhoneWindow->state = FREE;
+	//TODO: Send Message to VideoServer to notify it the window is free now, and you can assign this window to other MVideo
+
+
 	this->Close();
 	CAsyncSocket::OnClose(nErrorCode);
 }
@@ -111,8 +132,12 @@ void CVideo::OnReceive(int nErrorCode)
 		//if(m_pSensorTab->isShowVideo)
 		//{
 			unsigned char *inbuf_ptr = inbuf;
-			fwrite(inbuf_ptr, 1, nReceived, fp_b);
-			showVideo(inbuf_ptr, nReceived);
+			//fwrite(inbuf_ptr, 1, nReceived, fp_b);
+			if (canShow) {
+				showVideo(inbuf_ptr, nReceived);
+			}else {
+				TRACE("no enough window to show this phone\n");
+			}
 		//}
 	}
 	CAsyncSocket::OnReceive(nErrorCode);
@@ -131,6 +156,12 @@ void CVideo::showVideo(unsigned char *buf, int size)
 		}
 		if (got_picture)
 		{
+			picture->data[0] += picture->linesize[0] * (pCodecCtx->height - 1);
+			picture->linesize[0] = -picture->linesize[0];
+			picture->data[1]+= picture->linesize[1] * (pCodecCtx->height / 2 - 1);
+			picture->linesize[1] = -picture->linesize[1];
+			picture->data[2] += picture->linesize[2]* (pCodecCtx->height / 2 - 1);
+			picture->linesize[2] = -picture->linesize[2];
 			printf("saving frame %3d\n", frame);                           
 			frame++;
 
@@ -270,4 +301,9 @@ void CVideo::PicChange(unsigned char *picbuffer,unsigned char *outbuff,int width
 		}
 	}
 	
+}
+
+void CVideo::show()
+{
+	canShow = TRUE;
 }

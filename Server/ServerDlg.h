@@ -36,4 +36,6 @@ public:
 
 private:
 	CVideoServer *pVideoServer;
+public:
+	afx_msg void OnStnClickedStatic1();
 };

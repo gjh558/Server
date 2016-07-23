@@ -3,6 +3,8 @@
 #include "ffmpeg/include/avformat.h"
 
 
+class PhoneWindow;
+
 #define INBUF_SIZE 4096
 
 class CVideo : public CAsyncSocket
@@ -11,6 +13,7 @@ public:
 
 	CVideo();
 	CVideo(CWnd *win);
+	CVideo(PhoneWindow *p);
 	~CVideo(void);
 public:
 	virtual void OnConnect(int nErrorCode);
@@ -29,6 +32,7 @@ public:
 	void PicChange(unsigned char *picbuffer,unsigned char *outbuff,int width,int height);
 	void DisplayPicture(unsigned char *dis_buf,int dis_width,int dis_height);
 	
+	void show();
 public:
 	
 	AVCodec *codec;//#####
@@ -42,6 +46,10 @@ public:
 
 	HDRAWDIB mDrawDib;
 	CWnd *m_pPlayCwnd;
+
+	PhoneWindow *m_pPhoneWindow;
+
+	BOOL canShow;
 	
 };
 

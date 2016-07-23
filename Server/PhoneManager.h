@@ -1,8 +1,12 @@
 #pragma once
 // CServerSocket ÃüÁîÄ¿±ê
+#include <queue>
+
+using namespace std;
 
 class CVideo;
 class CServerDlg;
+class CPhoneWindowManager;
 
 class CVideoServer : public CAsyncSocket
 {
@@ -25,6 +29,9 @@ private:
 
 	CVideo * m_pVideo;
 
+	queue <CVideo *> mVideos;
+
+	CPhoneWindowManager *pPhoneWindowManager;
 
 };
 

@@ -1,19 +1,17 @@
 #pragma once
 
-enum STATE{
-	OCCUPY = 0,
+enum STATE {
+	OCCUPIED = 0,
 	FREE = 1
 };
 
-struct PhoneWindow
+class PhoneWindow
 {
 public:
-	PhoneWindow(CWnd *pWnd, STATE status);
+	PhoneWindow(CWnd *pWnd);
 	~PhoneWindow(void);
 
 	CWnd *m_pWnd;
 	STATE state;
-
-	void setState(STATE st);
 };
 

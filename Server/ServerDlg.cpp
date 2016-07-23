@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CServerDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CServerDlg::OnBnClickedButton1)
+	ON_STN_CLICKED(IDC_STATIC1, &CServerDlg::OnStnClickedStatic1)
 END_MESSAGE_MAP()
 
 
@@ -174,4 +175,10 @@ void CServerDlg::OnBnClickedButton1()
 	{
 		TRACE("SOCKET LISTEN ERROR: %d\n", GetLastError());
 	}
+}
+
+
+void CServerDlg::OnStnClickedStatic1()
+{
+	// TODO: Add your control notification handler code here
 }

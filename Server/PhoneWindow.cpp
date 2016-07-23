@@ -2,18 +2,13 @@
 #include "PhoneWindow.h"
 
 
-PhoneWindow::PhoneWindow(CWnd *pWnd, STATE status)
+PhoneWindow::PhoneWindow(CWnd *pWnd)
 	:m_pWnd(pWnd),
-	state(status)
+	state(FREE)
 {
 }
 
 
 PhoneWindow::~PhoneWindow(void)
 {
-}
-
-void PhoneWindow::setState(STATE st)
-{
-		state = st;
 }
